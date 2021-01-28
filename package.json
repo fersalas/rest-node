@@ -4,8 +4,8 @@
   "description": "Node/Typescript REST API",
   "main": "app/app.ts",
   "scripts": {
-    "start": "tsc && node dist/index.js",  
-    "dev": "nodemon --watch 'app/**/*.ts' --exec 'ts-node' app/app.ts", 
+    "start": "tsc && node dist/app.js",  
+    "dev": " export DEBUG=app && nodemon --watch 'app/**/*.ts' --exec 'ts-node' app/app.ts", 
     "lint:fix": "eslint . --fix",
     "lint": "eslint . --ext .ts",
     "test": "echo \"Error: no test specified\" && exit 1"
