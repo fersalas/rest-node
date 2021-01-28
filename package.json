@@ -1,0 +1,24 @@
+{
+  "name": "rest-node",
+  "version": "1.0.0",
+  "description": "Node/Typescript REST API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fersalas/rest-node.git"
+  },
+  "keywords": [
+    "typescript",
+    "node",
+    "rest"
+  ],
+  "author": "Fernando Salas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fersalas/rest-node/issues"
+  },
+  "homepage": "https://github.com/fersalas/rest-node#readme"
+}
