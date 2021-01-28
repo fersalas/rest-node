@@ -4,8 +4,8 @@
   "description": "Node/Typescript REST API",
   "main": "app/app.ts",
   "scripts": {
-    "start": "tsc && node dist/app.js",  
-    "dev": " export DEBUG=app && nodemon --watch 'app/**/*.ts' --exec 'ts-node' app/app.ts", 
+    "start": "tsc && node dist/app.js",
+    "dev": " export DEBUG=app && nodemon --watch 'app/**/*.ts' --exec 'ts-node' app/app.ts",
     "lint:fix": "eslint . --fix",
     "lint": "eslint . --ext .ts",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -26,10 +26,12 @@
   },
   "homepage": "https://github.com/fersalas/rest-node#readme",
   "dependencies": {
+    "argon2": "^0.27.1",
     "cors": "^2.8.5",
     "debug": "^4.3.1",
     "express": "^4.17.1",
     "express-winston": "^4.0.5",
+    "shortid": "^2.2.16",
     "winston": "^3.3.3"
   },
   "devDependencies": {
@@ -38,6 +40,7 @@
     "@types/cors": "^2.8.9",
     "@types/debug": "^4.1.5",
     "@types/express": "^4.17.11",
+    "@types/shortid": "^0.0.29",
     "@typescript-eslint/eslint-plugin": "^4.14.1",
     "@typescript-eslint/parser": "^4.14.1",
     "eslint": "^7.18.0",
