@@ -35,7 +35,7 @@ class MongooseService {
       .then(() => {
         console.log('MongoDB is connected');
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('MongoDB connection failed, retry after 5 seconds', ++this.count);
         setTimeout(this.connectWithRetry, 5000);
       });

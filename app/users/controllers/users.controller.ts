@@ -2,6 +2,7 @@ import * as express from 'express';
 import argon2 from 'argon2';
 import debug from 'debug';
 
+import { ResponseCodes } from '../../common/constants/ResponseCodes';
 import usersService from '../services/users.service';
 
 const log: debug.IDebugger = debug('app:users-controller');
@@ -19,18 +20,21 @@ class UsersController {
 
   async listUsers(req: express.Request, res: express.Response) {
     const users = await usersService.list(100, 0);
-    res.status(200).send(users);
+    res.status(ResponseCodes.SUCCESS).send(users);
   }
 
   async getUserById(req: express.Request, res: express.Response) {
     const user = await usersService.readById(req.params.userId);
-    res.status(200).send(user);
+    res.status(ResponseCodes.SUCCESS).send(user);
   }
 
   async createUser(req: express.Request, res: express.Response) {
-    req.body.password = await argon2.hash(req.body.password);
-    const userId = await usersService.create(req.body);
-    res.status(201).send({ id: userId });
+    const newUser = {
+      ...req.body,
+      password: await argon2.hash(req.body.password)
+    };
+    const userId = await usersService.create(newUser);
+    res.status(ResponseCodes.CREATED).send({ id: userId });
   }
 
   async patch(req: express.Request, res: express.Response) {
@@ -39,18 +43,18 @@ class UsersController {
     }
 
     log(await usersService.patchById(req.params.userId, req.body));
-    res.status(204).send('');
+    res.status(ResponseCodes.NO_CONTENT).send('');
   }
 
   async put(req: express.Request, res: express.Response) {
     req.body.password = await argon2.hash(req.body.password);
     log(await usersService.updateById(req.params.userId, req.body));
-    res.status(204).send('');
+    res.status(ResponseCodes.NO_CONTENT).send('');
   }
 
   async removeUser(req: express.Request, res: express.Response) {
     log(await usersService.deleteById(req.params.userId));
-    res.status(204).send(``);
+    res.status(ResponseCodes.NO_CONTENT).send(``);
   }
 }
 

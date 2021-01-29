@@ -2,6 +2,7 @@ import * as shortUUID from 'shortid';
 import debug from 'debug';
 
 import mongooseService from '../../common/services/mongoose.service';
+import { ModificationNote } from '../../common/interfaces/modification_note.interface';
 
 const log: debug.IDebugger = debug('app:in-memory-dao');
 
@@ -16,7 +17,8 @@ class UsersDao {
     password: { type: String, select: false },
     firstName: String,
     lastName: String,
-    permissionLevel: Number
+    permissionLevel: Number,
+    modification_notes: [ModificationNote]
   });
 
   User = mongooseService.getMongoose().model('Users', this.userSchema);
@@ -32,8 +34,19 @@ class UsersDao {
     return this.instance;
   }
 
+  private createModificationNote(modification_note: string): ModificationNote {
+    return {
+      modified_by: null,
+      modified_on: new Date(Date.now()),
+      modification_note
+    };
+  }
+
   async addUser(userFields: any) {
     userFields._id = shortUUID.generate();
+    userFields.modification_notes = [
+      UsersDao.getInstance().createModificationNote('New User Created')
+    ];
     const user = new this.User(userFields);
     await user.save();
 
@@ -56,9 +69,10 @@ class UsersDao {
   }
 
   async patchUserById(userId: string, userFields: any) {
+    const mn = UsersDao.getInstance().createModificationNote('User Updated');
     const existingUser = await this.User.findOneAndUpdate(
       { _id: userId },
-      { $set: userFields },
+      { $set: userFields, $push: { modification_notes: mn } },
       { new: true }
     ).exec();
 

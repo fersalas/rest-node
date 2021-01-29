@@ -1,5 +1,6 @@
 import express from 'express';
 
+import { ResponseCodes } from '../../common/constants/ResponseCodes';
 import userService from '../services/users.service';
 
 class UsersMiddleware {
@@ -20,7 +21,9 @@ class UsersMiddleware {
     if (req.body && req.body.email && req.body.password) {
       next();
     } else {
-      res.status(400).send({ error: `Missing required fields: email and/or password` });
+      res
+        .status(ResponseCodes.BAD_REQUEST)
+        .send({ error: `Missing required fields: email and/or password` });
     }
   }
 
@@ -31,7 +34,7 @@ class UsersMiddleware {
   ) {
     const user = await userService.getUserByEmail(req.body.email);
     if (user) {
-      res.status(400).send({ error: 'User email already exists' });
+      res.status(ResponseCodes.BAD_REQUEST).send({ error: 'User email already exists' });
     } else {
       next();
     }
@@ -46,7 +49,7 @@ class UsersMiddleware {
     if (user && user.id === req.params.userId) {
       next();
     } else {
-      res.status(400).send({ error: `Invalid email` });
+      res.status(ResponseCodes.BAD_REQUEST).send({ error: `Invalid email` });
     }
   }
 
@@ -71,7 +74,7 @@ class UsersMiddleware {
     if (user) {
       next();
     } else {
-      res.status(404).send({ error: `User ${req.params.userId} not found` });
+      res.status(ResponseCodes.NOT_FOUND).send({ error: `User ${req.params.userId} not found` });
     }
   }
 

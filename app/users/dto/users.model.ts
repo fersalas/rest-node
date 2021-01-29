@@ -1,3 +1,4 @@
+import { ModificationNote } from '../../common/interfaces/modification_note.interface';
 export interface UsersDto {
   id: string;
   email: string;
@@ -5,4 +6,5 @@ export interface UsersDto {
   firstName?: string;
   lastName?: string;
   permissionLevel?: number;
+  modification_notes: ModificationNote[];
 }
