@@ -7,51 +7,51 @@ import usersService from '../services/users.service';
 const log: debug.IDebugger = debug('app:users-controller');
 
 class UsersController {
-    private static instance: UsersController;
+  private static instance: UsersController;
 
-    static getInstance(): UsersController {
-        if (!UsersController.instance) {
-            UsersController.instance = new UsersController();
-        }
-
-        return UsersController.instance;
+  static getInstance(): UsersController {
+    if (!UsersController.instance) {
+      UsersController.instance = new UsersController();
     }
 
-    async listUsers(req: express.Request, res: express.Response) {
-        const users = await usersService.list(100, 0);
-        res.status(200).send(users);
+    return UsersController.instance;
+  }
+
+  async listUsers(req: express.Request, res: express.Response) {
+    const users = await usersService.list(100, 0);
+    res.status(200).send(users);
+  }
+
+  async getUserById(req: express.Request, res: express.Response) {
+    const user = await usersService.readById(req.params.userId);
+    res.status(200).send(user);
+  }
+
+  async createUser(req: express.Request, res: express.Response) {
+    req.body.password = await argon2.hash(req.body.password);
+    const userId = await usersService.create(req.body);
+    res.status(201).send({ id: userId });
+  }
+
+  async patch(req: express.Request, res: express.Response) {
+    if (req.body.password) {
+      req.body.password = await argon2.hash(req.body.password);
     }
 
-    async getUserById(req: express.Request, res: express.Response) {
-        const user = await usersService.readById(req.params.userId);
-        res.status(200).send(user);
-    }
+    log(await usersService.patchById(req.params.userId, req.body));
+    res.status(204).send('');
+  }
 
-    async createUser(req: express.Request, res: express.Response) {
-        req.body.password = await argon2.hash(req.body.password);
-        const userId = await usersService.create(req.body);
-        res.status(201).send({ id: userId });
-    }
+  async put(req: express.Request, res: express.Response) {
+    req.body.password = await argon2.hash(req.body.password);
+    log(await usersService.updateById(req.params.userId, req.body));
+    res.status(204).send('');
+  }
 
-    async patch(req: express.Request, res: express.Response) {
-        if (req.body.password) {
-            req.body.password = await argon2.hash(req.body.password);
-        }
-
-        log(await usersService.patchById(req.params.userId, req.body));
-        res.status(204).send('');
-    }
-
-    async put(req: express.Request, res: express.Response) {
-        req.body.password = await argon2.hash(req.body.password);
-        log(await usersService.updateById(req.params.userId, req.body));
-        res.status(204).send('');
-    }
-
-    async removeUser(req: express.Request, res: express.Response) {
-        log(await usersService.deleteById(req.params.userId));
-        res.status(204).send(``);
-    }
+  async removeUser(req: express.Request, res: express.Response) {
+    log(await usersService.deleteById(req.params.userId));
+    res.status(204).send(``);
+  }
 }
 
 export default UsersController.getInstance();
