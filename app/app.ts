@@ -23,10 +23,10 @@ app.use(cors());
 
 // log HTTP requests handled by Express.js
 app.use(
-    expressWinston.logger({
-        transports: [new winston.transports.Console()],
-        format: winston.format.combine(winston.format.colorize(), winston.format.json())
-    })
+  expressWinston.logger({
+    transports: [new winston.transports.Console()],
+    format: winston.format.combine(winston.format.colorize(), winston.format.json())
+  })
 );
 
 // Routes
@@ -34,20 +34,20 @@ routes.push(new UsersRoutes(app));
 
 // error-logging middleware,
 app.use(
-    expressWinston.errorLogger({
-        transports: [new winston.transports.Console()],
-        format: winston.format.combine(winston.format.colorize(), winston.format.json())
-    })
+  expressWinston.errorLogger({
+    transports: [new winston.transports.Console()],
+    format: winston.format.combine(winston.format.colorize(), winston.format.json())
+  })
 );
 
 // sample route
 app.get('/', (req: express.Request, res: express.Response) => {
-    res.status(200).send(`Server up and running!`);
+  res.status(200).send(`Server up and running!`);
 });
 
 server.listen(port, () => {
-    debugLog(`Server running at http://localhost:${port}`);
-    routes.forEach((route: CommonRoutesConfig) => {
-        debugLog(`Routes configured for ${route.getName()}`);
-    });
+  debugLog(`Server running at http://localhost:${port}`);
+  routes.forEach((route: CommonRoutesConfig) => {
+    debugLog(`Routes configured for ${route.getName()}`);
+  });
 });
